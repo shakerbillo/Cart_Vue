@@ -1,8 +1,9 @@
 const app = Vue.createApp({
 	data() {
 		return {
-			product: 'Socks',
-			productDescription: 'This is socks',
+			cart: 0,
+			premium: true,
 		};
 	},
+	methods: {},
 });
