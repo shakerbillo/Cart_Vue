@@ -1,10 +1,10 @@
 app.component('product-display', {
-    props: {
-premium:{
-    type: Boolean,
-    required: true,
-}
-    },
+	props: {
+		premium: {
+			type: Boolean,
+			required: true,
+		},
+	},
 	template:
 		/*html*/
 		`<div class="product-display">
@@ -30,8 +30,17 @@ premium:{
   
           <button class="button" :class="{ disabledButton: !inStock }" :disabled="!inStock" v-on:click="addToCart">Add to
             Cart</button>
+             <button 
+        class="button" 
+        :class="{ disabledButton: !inStock }" 
+        :disabled="!inStock" 
+        @click="removeFromCart">
+        Remove Item
+      </button>
         </div>
       </div>
+      <review-list v-if="reviews.length" :reviews="reviews"></review-list>
+      <review-form @review-submitted="addReview" ></review-form>
     </div>`,
 
 	data() {
@@ -54,16 +63,23 @@ premium:{
 					quantity: 0,
 				},
 			],
+			reviews: [],
 
 			onSale: true,
 		};
 	},
 	methods: {
 		addToCart() {
-			this.cart += 1;
+			this.$emit('add-to-cart', this.variants[this.selectedVariant].id);
+		},
+		removeFromCart() {
+			this.$emit('remove-from-cart', this.variants[this.selectedVariant].id);
 		},
 		updateVariant(index) {
 			this.selectedVariant = index;
+		},
+		addReview(review) {
+			this.reviews.push(review);
 		},
 	},
 	computed: {
@@ -83,11 +99,11 @@ premium:{
 			}
 			return '';
 		},
-        shipping(){
-            if(this.premium){
-                return 'Free'
-            }
-            return '$7.99'
-        }
+		shipping() {
+			if (this.premium) {
+				return 'Free';
+			}
+			return '$7.99';
+		},
 	},
 });
